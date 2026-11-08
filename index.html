@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101225"><title>Đố Vui Dân Gian — Phòng chơi</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/quiz.css">
+  <link rel="stylesheet" href="/popup.css">
+</head>
+<body>
+  <main class="app">
+    <header class="top"><a class="brand" href="/">✦ ĐỐ VUI DÂN GIAN</a><span class="online"><i></i> Cùng chơi nào</span></header>
+    <section id="home" class="hero">
+      <div class="hero-copy"><span class="eyebrow">CÂU ĐỐ DÂN GIAN · TỐI ĐA 50 NGƯỜI</span><h1>Đố vui một chút.<br><em>Vui cả làng.</em></h1><p>Ca dao, câu đố mẹo và chuyện dân gian. Tự gõ câu trả lời, trả lời càng nhanh càng ghi nhiều điểm.</p>
+        <div class="hero-stats"><span>⏱ 30 giây / câu</span><span>✍️ Tự nhập đáp án</span><span>🏆 Top 3 cuối ván</span></div>
+      </div>
+      <div class="entry-card">
+        <div class="tabs"><button class="tab active" data-tab="join">Vào phòng</button><button class="tab" data-tab="create">Tạo phòng</button></div>
+        <form id="joinForm" class="form-panel"><label for="joinName">Tên của bạn</label><input id="joinName" maxlength="24" placeholder="Ví dụ: Minh Anh" required><label for="roomCode">Mã phòng</label><input id="roomCode" maxlength="8" placeholder="VD: ABC123" class="code-input" required><button class="primary" type="submit">Vào chơi <span>→</span></button><p class="fine">Không cần tài khoản. Chỉ cần tên và mã phòng.</p></form>
+        <form id="createForm" class="form-panel hidden"><label for="hostName">Tên hiển thị</label><input id="hostName" maxlength="24" placeholder="Tên của bạn" required><p class="fine">Mỗi ván có 30 câu hỏi ngẫu nhiên. Mỗi câu có 30 giây; đúng nhanh được nhiều điểm hơn.</p><button class="primary" type="submit">Tạo phòng <span>→</span></button></form>
+        <div id="homeError" class="error hidden"></div>
+      </div>
+    </section>
+    <section id="lobby" class="room hidden">
+      <div class="room-head"><div><span class="eyebrow" id="roomStatus">PHÒNG CHỜ</span><h2>Phòng <strong id="roomCodeLabel"></strong></h2><p id="roomHint">Mời mọi người vào phòng rồi bắt đầu nhé.</p></div><button id="leaveBtn" class="quiet">Rời phòng ↗</button></div>
+      <div id="lobbyGrid" class="lobby-grid"><article class="panel invite"><h3>Mời bạn bè cùng chơi</h3><p>Quét QR hoặc gửi link này cho mọi người.</p><div class="invite-content"><div id="qrWrap" class="qr-wrap"><img id="qrImage" alt="Mã QR vào phòng"><span id="qrFallback">Mã <b id="qrCodeText"></b></span></div><div class="invite-link"><label>Link vào phòng</label><div class="copy-row"><input id="shareLink" readonly><button id="copyBtn" aria-label="Sao chép link">⧉</button></div><button id="copyCodeBtn" class="copy-code">Sao chép mã phòng</button></div></div><p class="fine">Tối đa 50 người · Chỉ cần nhập tên</p></article><article class="panel players"><div class="panel-title"><h3>Người chơi</h3><span id="playerCount" class="count">0 / 50</span></div><ul id="playerList"></ul><div id="hostControls" class="host-controls hidden"><button id="startBtn" class="primary">Bắt đầu 30 câu <span>→</span></button><button id="finishBtn" class="quiet hidden">Kết thúc sớm</button></div></article></div>
+      <section id="gamePanel" class="game-layout hidden">
+        <article class="panel quiz-card">
+          <div id="questionView">
+            <div class="quiz-top"><div><span class="eyebrow" id="questionCategory">CÂU ĐỐ DÂN GIAN</span><p id="questionNumber" class="question-number">CÂU 1 / 30</p></div><div id="timerBadge" class="timer-badge"><strong id="timer">30</strong><span>GIÂY</span></div></div>
+            <div class="progress-track"><div id="timerBar" class="progress-fill"></div></div>
+            <h2 id="questionText">Câu hỏi sẽ hiện ở đây</h2>
+            <form id="answerForm" class="answer-form"><input id="answerInput" maxlength="120" placeholder="Tự gõ câu trả lời của bạn…" autocomplete="off" required><button id="answerButton" class="primary" type="submit">Gửi đáp án <span>→</span></button></form>
+            <div id="answerFeedback" class="answer-feedback" aria-live="polite"></div>
+            <p class="fine">Trả lời đúng được tối đa 100 điểm. Mỗi giây trôi qua giảm 3 điểm; sai hoặc hết giờ được 0.</p>
+          </div>
+          <div id="doneView" class="done-view hidden"><span class="eyebrow">ĐÃ HOÀN THÀNH</span><h2>Bạn đã trả lời xong 30 câu!</h2><p>Chờ mọi người hoàn thành để xem bảng xếp hạng nhé.</p></div>
+          <div id="hostGameControls" class="host-controls hidden"><button id="finishGameBtn" class="quiet">Kết thúc ván</button></div>
+        </article>
+        <aside class="panel leaderboard"><div class="panel-title"><div><span class="eyebrow">BẢNG ĐIỂM</span><h3>Đang dẫn đầu</h3></div><span id="myScore" class="count">0 điểm</span></div><ol id="leaderboardList"></ol></aside>
+      </section>
+      <article id="resultPanel" class="panel result hidden"><span class="eyebrow">VÁN CHƠI KẾT THÚC</span><h2>🏆 Bảng xếp hạng</h2><p id="finalSummary">30 câu đã khép lại.</p><ol id="finalLeaderboard"></ol></article>
+    </section>
+    <footer>Đố Vui Dân Gian <span>·</span> Cả nhà cùng vui, ai nhanh người đó ghi điểm</footer>
+  </main>
+  <div id="answerPopup" class="answer-popup hidden" role="dialog" aria-modal="true" aria-live="polite">
+    <article class="answer-popup-card"><span id="popupQuestionNumber" class="eyebrow">CÂU 1 / 30</span><h2 id="popupStatus">Chính xác!</h2><p class="popup-caption">Đáp án</p><strong id="popupAnswer" class="popup-answer"></strong><p id="popupYourAnswer" class="popup-your-answer"></p><p id="popupCountdown" class="popup-countdown">Câu tiếp theo sau 3 giây</p></article>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
